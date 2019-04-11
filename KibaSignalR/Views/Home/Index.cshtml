@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "KibaHub";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - KibaHub</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>@*优先signalR引用*@
+    <script src="~/Scripts/jquery.signalR-2.4.0.js"></script>
+    <script src="~/Signalr/hubs"></script>@*这个是临时生成的文件，里面保存的是我们在服务器定义的hub生成的JavaScript代码*@
+</head>
+<body>
+    <div class="container body-content">
+
+        <div class="jumbotron">
+            <h1>KibaHub</h1> 
+            <p><a href="https://go.microsoft.com/fwlink/?LinkID=316888" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+        </div> 
+        <div class="row"> 
+            <script type='text/javascript'>
+
+                //引用自动生成的代理，kibahub是HubName注解属性
+                //异常参考网址 https://stackoverflow.com/questions/23211577/signalr-cannot-read-property-hub-of-undefined
+                var kibaHub = $.connection.kibahub;
+                console.log("kibaHub get");
+                //开始连接
+                $.connection.hub.start().done(function () {
+                    console.log("hub start done");
+                    //客户端发送信息到服务器
+                    kibaHub.server.send('kiba');
+                    console.log("Send done");
+                });
+                kibaHub.client.getmessage = function (message) {
+                    console.log("getmessage:" + message);
+                };
+            </script> 
+        </div>
+    </div> 
+    @Scripts.Render("~/bundles/bootstrap") 
+</body>
+</html>
